@@ -197,6 +197,16 @@
       padding-left: 27px;
       margin: 10px 0;
     }
+    .wheel__sum::before{
+      position: absolute;
+      content: "";
+      width: 20px;
+      height: 20px;
+      background-image: url('./sum.svg');
+      background-repeat: no-repeat;
+      top: 0;
+      left: 0;
+    }
 
     .wheel__amount {
       position: relative;
@@ -208,7 +218,16 @@
       line-height: normal;
       padding-left: 27px;
     }
-
+    .wheel__amount::before{
+      position: absolute;
+      content: "";
+      width: 20px;
+      height: 20px;
+      background-image: url('./group.svg');
+      background-repeat: no-repeat;
+      top: 0;
+      left: 0;
+    }
     .casino-wrapper {
       position: relative;
       z-index: 1000;
@@ -243,16 +262,17 @@
 
     .arrow-indicator {
       position: absolute;
-      top: -15px;
+      top: 5px;
       left: 50%;
       transform: translateX(-50%);
       width: 0;
       height: 0;
-      border-left: 15px solid transparent;
-      border-right: 15px solid transparent;
-      border-bottom: 25px solid #ffffff;
+      border-left: 18px solid transparent;
+      border-right: 18px solid transparent;
+      border-bottom: 35px solid #ffff00;
       z-index: 2;
-      box-shadow: 0 2px 8px rgba(255, 255, 255, 0.3);
+      box-shadow: 0 3px 10px rgba(255, 255, 0, 0.5);
+      filter: drop-shadow(0 0 3px #ffff00);
     }
 
     .number-square {
@@ -296,7 +316,7 @@
     </div>
 
     <div class="betting-controls">
-      <div>Фішки:</div>
+      <div>Фишки:</div>
       <div class="bet-chip active" data-amount="1">1</div>
       <div class="bet-chip" data-amount="5">5</div>
       <div class="bet-chip" data-amount="10">10</div>
@@ -555,7 +575,7 @@
         const color = getNumberColor(number);
 
         // Розраховуємо позицію квадратика з більшою відстанню від центру
-        const rectRadius = 85; // збільшена відстань від центру до квадратика (було 80)
+        const rectRadius = 85; // ще більше збільшена відстань від центру для уникнення накладання
         const rectX = 100 + rectRadius * Math.cos(angle * Math.PI / 180);
         const rectY = 100 + rectRadius * Math.sin(angle * Math.PI / 180);
 
@@ -565,15 +585,15 @@
         group.classList.add("number-square");
         group.dataset.originalAngle = angle;
 
-        // Квадратик для числа з більшим розміром для збільшення відстані
+        // Квадратик для числа
         const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-        rect.setAttribute("x", rectX - 8); // збільшено з 7 до 8
-        rect.setAttribute("y", rectY - 8); // збільшено з 7 до 8
-        rect.setAttribute("width", "16"); // збільшено з 14 до 16
-        rect.setAttribute("height", "16"); // збільшено з 14 до 16
+        rect.setAttribute("x", rectX - 7); // зменшено назад до 7
+        rect.setAttribute("y", rectY - 7); // зменшено назад до 7
+        rect.setAttribute("width", "14"); // зменшено назад до 14
+        rect.setAttribute("height", "14"); // зменшено назад до 14
         rect.setAttribute("fill", color);
-        rect.setAttribute("rx", "4");
-        rect.setAttribute("ry", "4");
+        rect.setAttribute("rx", "3");
+        rect.setAttribute("ry", "3");
         group.appendChild(rect);
 
         // Текст числа в квадратику (завжди горизонтальний)
@@ -581,7 +601,7 @@
         text.setAttribute("x", rectX);
         text.setAttribute("y", rectY + 1); // трохи зміщуємо для кращого центрування
         text.setAttribute("fill", "white");
-        text.setAttribute("font-size", "6"); // збільшено з 5 до 6
+        text.setAttribute("font-size", "4.5"); // зменшено шрифт
         text.setAttribute("font-weight", "bold");
         text.setAttribute("text-anchor", "middle");
         text.setAttribute("alignment-baseline", "middle");
@@ -616,9 +636,9 @@
       svgWheel.style.transform = `rotate(${currentAngle}deg)`;
       document.querySelector('.wheel-numbers').style.transform = `rotate(${currentAngle}deg)`;
 
-      // Компенсуємо обертання кожного квадратика + додаємо поворот на 120 градусів
+      // Компенсуємо обертання кожного квадратика, щоб числа залишались горизонтальними
       document.querySelectorAll('.number-square').forEach(square => {
-        square.style.transform = `rotate(${-currentAngle + 120}deg)`; // додано + 120
+        square.style.transform = `rotate(${-currentAngle}deg)`;
       });
 
       // Визначаємо виграшний сектор
@@ -630,12 +650,12 @@
         const winAmount = checkBets(winningNumber);
         balance += winAmount;
 
-        let resultText = `Випало число: <strong style="color: ${getNumberColor(winningNumber)}">${winningNumber}</strong>`;
+        let resultText = `Выпало число: <strong style="color: ${getNumberColor(winningNumber)}">${winningNumber}</strong>`;
 
         if (winAmount > 0) {
-          resultText += `<br>Ви виграли: <span style="color: #28a745">$${winAmount}</span>`;
+          resultText += `<br>Вы выграли: <span style="color: #28a745">$${winAmount}</span>`;
         } else {
-          resultText += `<br><span style="color: #e91e63">Програш</span>`;
+          resultText += `<br><span style="color: #e91e63">Проигрыш</span>`;
         }
 
         result.innerHTML = resultText;
